@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { SearchIcon } from "../../icon/SearchIcon";
 import { Input } from "../Input";
 import { Table } from "../Table";
@@ -6,7 +6,14 @@ import { ContainerHeader, Container, ContainerRepo } from "./styled";
 
 export function Background() {
   const [search, setSearch] = useState("");
-  console.log(search);
+  const [repositories, setRepositories] = useState([]);
+  useEffect(() => {
+    fetch("https://api.github.com/users/JulioDev1/repos")
+      .then((response) => response.json())
+      .then((data) => {
+        setRepositories(data);
+      });
+  }, []);
   return (
     <Container>
       <ContainerHeader>
@@ -18,9 +25,19 @@ export function Background() {
         />
       </ContainerHeader>
       <ContainerRepo>
-        <Table name="Desafio-Ally-02" language="Updated 3 days ago" />
-        <Table name="Desafio-Ally-02" language="Updated 3 days ago" />
-        <Table name="Desafio-Ally-02" language="Updated 3 days ago" />
+        {repositories
+          .filter((repository) =>
+            repository.name.toLowerCase().includes(search)
+          )
+          .map((repository) => {
+            return (
+              <Table
+                key={repository.name}
+                name={repository.name}
+                html_url={repository.html_url}
+              />
+            );
+          })}
       </ContainerRepo>
     </Container>
   );

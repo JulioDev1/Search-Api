@@ -1,10 +1,10 @@
 import { ContainerRepo } from "./styled";
 
-export function Table({ name, language }) {
+export function Table({ name, html_url }) {
   return (
     <ContainerRepo>
       <h1>{name}</h1>
-      <span>{language}</span>
+      <a href={html_url}> Acessar repositorio</a>
     </ContainerRepo>
   );
 }
